@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task | TaskFlow</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #dbeafe, #ede9fe);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            padding: 35px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(31, 41, 55, 0.12);
+        }
+
+        h1 {
+            color: #312e81;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px #e0e7ff;
+        }
+
+        .update-btn {
+            width: 100%;
+            padding: 13px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: #3730a3;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            background: #eef2ff;
+            color: #3730a3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Edit Task</h1>
+        <p class="subtitle">Update your task details below.</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="title">Task Title</label>
+            <input
+                type="text"
+                name="title"
+                id="title"
+                value="{{ task.title }}"
+                required
+            >
+
+            <label for="work">Description</label>
+            <textarea
+                name="work"
+                id="work"
+                required
+            >{{ task.work }}</textarea>
+
+            <label for="status">Status</label>
+            <select name="status" id="status" required>
+                <option value="Pending"
+                    {% if task.status == "Pending" %}selected{% endif %}>
+                    Pending
+                </option>
+
+                <option value="In Progress"
+                    {% if task.status == "In Progress" %}selected{% endif %}>
+                    In Progress
+                </option>
+
+                <option value="Completed"
+                    {% if task.status == "Completed" %}selected{% endif %}>
+                    Completed
+                </option>
+            </select>
+
+            <button type="submit" class="update-btn">
+                Update Task
+            </button>
+        </form>
+
+        <a href="{% url 'home_viewtask' %}" class="back-link">
+            ← Back to My Tasks
+        </a>
+    </div>
+</body>
+</html>
